@@ -368,73 +368,19 @@ def plot_trajectories(paired_datasets, filtered: bool = False):
         plt.close(fig)
 
 
-from scipy.fft import fft
 
-def fft_on_dataset(filtered_datasets, datasets):
-    """
-    Perform FFT on measurement and setpoint data of paired datasets.
-
-    Parameters:
-    - filtered_datasets: A dictionary of DataFrames, with each key as an identifier
-                       and each value as a DataFrame containing the trajectory data.
-
-    Returns:
-    - fft_datasets: A dictionary containing the FFT results for each dataset.
-    """
-
-    # Dictionary to store the FFT results
-    fft_datasets = {}
-
-    for identifier, dataset in filtered_datasets.items():
-        # Copy the dataset to avoid modifying the original data
-        df = dataset.copy()
-
-        measure_columns = ['Position_X_measure', 'Position_Y_measure', 'Position_Z_measure',
-                           'Orientation_Z_measure', 'Orientation_Y_measure', 'Orientation_X_measure']
-        setpoint_columns = ['Position_X_setpoint', 'Position_Y_setpoint', 'Position_Z_setpoint',
-                            'Orientation_Z_setpoint', 'Orientation_Y_setpoint', 'Orientation_X_setpoint']
-        # positions = [
-        #     dataset[f'Position_{axis}_setpoint_filtered' if filtered else f'Position_{axis}_setpoint'] - dataset[
-        #         f'Position_{axis}_measure'] for axis in ['X', 'Y', 'Z']]
-        # orientations = [
-        #     dataset[f'Orientation_{axis}_setpoint_filtered' if filtered else f'Orientation_{axis}_setpoint'] - dataset[
-        #         f'Orientation_{axis}_measure'] for axis in ['Z', 'Y', 'X']]
-        # timestamps = dataset['Time']
-
-        # Dictionary to store FFT results for the current dataset
-        fft_results = {}
-
-        # Perform FFT for each measurement and setpoint column
-        for measure_col, setpoint_col in zip(measure_columns, setpoint_columns):
-            # Perform FFT
-            fft_measure = fft(df[measure_col].values)
-            fft_setpoint = fft(df[setpoint_col].values)
-
-            # Store the results
-            fft_results[f'{measure_col}_fft'] = fft_measure
-            fft_results[f'{setpoint_col}_fft'] = fft_setpoint
-
-        # Add the results for the current dataset to the main dictionary
-        fft_datasets[identifier] = fft_results
-
-    return fft_datasets
-
-# Example usage:
 data_directory = 'Data'
-datasets = create_datasets(data_directory)
+# datasets = create_datasets(data_directory)
 
 # plot_rmse_over_time(datasets, filtered=False)
 # plot_rmse_comparisons(datasets, filtered=False)
 # plot_trajectories(datasets, filtered=False)
 
-filtered_datasets = process_and_filter_data(datasets, filter_type='rls')
+# filtered_datasets = process_and_filter_data(datasets, filter_type='rls')
 
 # plot_rmse_over_time(filtered_datasets, filtered=True)
 # plot_trajectories(filtered_datasets, filtered=True)
 # plot_rmse_comparisons(filtered_datasets, filtered=True)
 
-
-fft_results = fft_on_dataset(filtered_datasets, datasets)
-
-
+# fft_results = fft_on_dataset(filtered_datasets, datasets)
 
